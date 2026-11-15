@@ -1,24 +1,36 @@
-        return jwt.verify(token, AUTH_SECRET_KEY);
-    } catch ( error ) {
-        return null;
-    }
+// Hash a plain-text password
+function hashPassword(password) {
+    const salt = bcrypt.genSaltSync(SALT_ROUNDS);
+    return bcrypt.hashSync(password,salt);
     // TODO:
-    // - Verify the token using AUTH_SECRET_KEY
-    // - Use try-catch for error handling
-    // - Return decoded payload if valid
-    // - Return null if verification fails
+    // - Generate a salt using SALT_ROUNDS
+    // - Hash the password with the generated salt
+    // - Return the hash
 
 }
 
 
-// Do not modify this
-// --- Example Usage ---
-if (process.env.NODE_ENV !== "test") {
-    const hashed = hashPassword("mySecurePass123");
-    console.log("Hashed Password:", hashed);
+// Verify a plain-text password against a hash
+function verifyPassword(password, hash) {
+    return bcrypt.compareSync(password,hash);
+    // TODO:
+    // - Compare the password with the hash
+    // - Return true if they match
+    // - Return false if they do not match
 
-    console.log("Correct Password Check:", verifyPassword("mySecurePass123", hashed));
-    console.log("Wrong Password Check:", verifyPassword("wrongPass", hashed));
+}
 
-    const myToken = generateToken("U100", "user@secureauth.com");
-    console.log("Generated Token:", myToken);
+
+// Generate a session token (JWT)
+function generateToken(userId, email) {
+
+    const payload = { userId, email};
+
+// Secret key for signing and verifying tokens
+const AUTH_SECRET_KEY = "SUPER_SECRET_SECUREAUTH_KEY";
+const SALT_ROUNDS = 10;
+
+
+// Number of salt rounds used for hashing
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
